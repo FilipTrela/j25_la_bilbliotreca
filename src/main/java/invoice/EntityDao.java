@@ -88,4 +88,62 @@ public class EntityDao {
             transaction.commit();
         }
     }
+
+    public List<Author> getAuthorsBySurname(String nazwisko) {
+        List<Author> list = new ArrayList<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+
+            CriteriaQuery<Author> criteriaQuery = cb.createQuery(Author.class);
+
+            Root<Author> root = criteriaQuery.from(Author.class);
+
+            criteriaQuery.select(root).where(
+                    cb.equal(root.get("lastName"), nazwisko)
+            );
+            list.addAll(session.createQuery(criteriaQuery).list());
+
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Reader> getReaderBySurname(String nazwisko) {
+        List<Reader> list = new ArrayList<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+
+            CriteriaQuery<Reader> criteriaQuery = cb.createQuery(Reader.class);
+
+            Root<Reader> root = criteriaQuery.from(Reader.class);
+
+            criteriaQuery.select(root).where(
+                    cb.equal(root.get("surname"), nazwisko)
+            );
+            list.addAll(session.createQuery(criteriaQuery).list());
+
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Book> getListBooksByReader() {
+        List<Book> list = new ArrayList<>();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+
+            CriteriaQuery<Book> criteriaQuery = cb.createQuery(Book.class);
+
+            Root<Book> root = criteriaQuery.from(Book.class);
+
+
+            list.addAll(session.createQuery(criteriaQuery).list());
+
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
